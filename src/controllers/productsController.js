@@ -1,12 +1,17 @@
 import fs from "fs";
-import { generateUniqueId } from "../utils";
+import path from "path";
+import { __dirname } from "../utils.js";
+import { generateUniqueId } from "../utils.js";
+
+// Obtener la ruta absoluta al archivo productos.json
+const filePath = path.join(__dirname, "../data/productos.json");
 
 const productsController = {
   getAllProducts: (req, res) => {
     const { limit } = req.query;
 
     // Leer el contenido de productos.json
-    fs.readFile("productos.json", "utf8", (err, data) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer productos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -34,7 +39,7 @@ const productsController = {
     const { pid } = req.params;
 
     // Leer el contenido de productos.json
-    fs.readFile("productos.json", "utf8", (err, data) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer productos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -73,7 +78,7 @@ const productsController = {
     } = req.body;
 
     // Leer el contenido de productos.json
-    fs.readFile("productos.json", "utf8", (err, data) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer productos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -104,7 +109,7 @@ const productsController = {
         products.push(newProduct);
 
         // Escribir el array de productos actualizado de nuevo en productos.json
-        fs.writeFile("productos.json", JSON.stringify(products), (err) => {
+        fs.writeFile(filePath, JSON.stringify(products), (err) => {
           if (err) {
             console.error("Error al escribir productos.json:", err);
             res.status(500).json({ error: "Error interno del servidor" });
@@ -125,7 +130,7 @@ const productsController = {
     const updatedFields = req.body;
 
     // Leer el contenido de productos.json
-    fs.readFile("productos.json", "utf8", (err, data) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer productos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -144,7 +149,7 @@ const productsController = {
           Object.assign(product, updatedFields);
 
           // Escribir el array de productos actualizado de nuevo en productos.json
-          fs.writeFile("productos.json", JSON.stringify(products), (err) => {
+          fs.writeFile(filePath, JSON.stringify(products), (err) => {
             if (err) {
               console.error("Error al escribir productos.json:", err);
               res.status(500).json({ error: "Error interno del servidor" });
@@ -167,7 +172,7 @@ const productsController = {
     const { pid } = req.params;
 
     // Leer el contenido de productos.json
-    fs.readFile("productos.json", "utf8", (err, data) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer productos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -186,7 +191,7 @@ const productsController = {
           products.splice(index, 1);
 
           // Escribir el array de productos actualizado de nuevo en productos.json
-          fs.writeFile("productos.json", JSON.stringify(products), (err) => {
+          fs.writeFile(filePath, JSON.stringify(products), (err) => {
             if (err) {
               console.error("Error al escribir productos.json:", err);
               res.status(500).json({ error: "Error interno del servidor" });

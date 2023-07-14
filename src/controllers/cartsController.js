@@ -1,11 +1,16 @@
 import fs from "fs";
+import path from "path";
+import { __dirname } from "../utils.js";
+
+// Obtener la ruta absoluta al archivo carritos.json
+const filePath = path.join(__dirname, "../data/carritos.json");
 
 const cartsController = {
   getCartById: (req, res) => {
     const { cid } = req.params;
 
     // Leer el contenido de carritos.json
-    fs.readFile("carritos.json", "utf8", (err, data) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer carritos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -35,7 +40,7 @@ const cartsController = {
     const { userId } = req.body;
 
     // Leer el contenido de carritos.json
-    fs.readFile("carritos.json", "utf8", (err, data) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer carritos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -60,7 +65,7 @@ const cartsController = {
         carts.push(newCart);
 
         // Escribir el array de carritos actualizado de nuevo en carritos.json
-        fs.writeFile("carritos.json", JSON.stringify(carts), (err) => {
+        fs.writeFile(filePath, JSON.stringify(carts), (err) => {
           if (err) {
             console.error("Error al escribir carritos.json:", err);
             res.status(500).json({ error: "Error interno del servidor" });
@@ -81,7 +86,7 @@ const cartsController = {
     const { productId, quantity } = req.body;
 
     // Leer el contenido de carritos.json
-    fs.readFile("carritos.json", "utf8", (err, data) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer carritos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -112,7 +117,7 @@ const cartsController = {
             cart.products.push(productToAdd);
 
             // Escribir el array de carritos actualizado de nuevo en carritos.json
-            fs.writeFile("carritos.json", JSON.stringify(carts), (err) => {
+            fs.writeFile(filePath, JSON.stringify(carts), (err) => {
               if (err) {
                 console.error("Error al escribir carritos.json:", err);
                 res.status(500).json({ error: "Error interno del servidor" });
@@ -139,7 +144,7 @@ const cartsController = {
     const { productId } = req.body;
 
     // Leer el contenido de carritos.json
-    fs.readFile("carritos.json", "utf8", (err, data) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer carritos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -164,7 +169,7 @@ const cartsController = {
             cart.products.splice(index, 1);
 
             // Escribir el array de carritos actualizado de nuevo en carritos.json
-            fs.writeFile("carritos.json", JSON.stringify(carts), (err) => {
+            fs.writeFile(filePath, JSON.stringify(carts), (err) => {
               if (err) {
                 console.error("Error al escribir carritos.json:", err);
                 res.status(500).json({ error: "Error interno del servidor" });

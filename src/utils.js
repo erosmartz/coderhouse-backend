@@ -1,4 +1,13 @@
-/* GENERADOR DE UNIQUE ID  */
+import { fileURLToPath } from "url";
+import path from "path";
+
+// __dirname
+// Obtener la ruta del archivo actual
+const __filename = fileURLToPath(import.meta.url);
+// Obtener la ruta del directorio del archivo
+export const __dirname = path.dirname(__filename);
+
+// Generador de ID unico
 export function generateUniqueId() {
   const timestamp = Date.now().toString(36);
   const randomStr = Math.random().toString(36).substr(2, 5);

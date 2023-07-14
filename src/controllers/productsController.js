@@ -4,7 +4,7 @@ import { __dirname } from "../utils.js";
 import { generateUniqueId } from "../utils.js";
 
 // Obtener la ruta absoluta al archivo productos.json
-const filePath = path.join(__dirname, "../data/productos.json");
+const filePath = path.join(__dirname, "./data/productos.json");
 
 const productsController = {
   getAllProducts: (req, res) => {
@@ -14,7 +14,7 @@ const productsController = {
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
+        res.status(500).json({ error: "No hay ningun producto!" });
         return;
       }
 

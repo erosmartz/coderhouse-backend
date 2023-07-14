@@ -3,7 +3,7 @@ import path from "path";
 import { __dirname } from "../utils.js";
 
 // Obtener la ruta absoluta al archivo carritos.json
-const filePath = path.join(__dirname, "../data/carritos.json");
+const filePath = path.join(__dirname, "./data/carritos.json");
 
 const cartsController = {
   getCartById: (req, res) => {

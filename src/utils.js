@@ -1,11 +1,11 @@
 import { fileURLToPath } from "url";
-import path from "path";
+import { dirname } from "path";
 
 // __dirname
 // Obtener la ruta del archivo actual
 const __filename = fileURLToPath(import.meta.url);
 // Obtener la ruta del directorio del archivo
-export const __dirname = path.dirname(__filename);
+export const __dirname = dirname(__filename);
 
 // Generador de ID unico
 export function generateUniqueId() {

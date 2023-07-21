@@ -6,15 +6,26 @@ import { generateUniqueId } from "../utils.js";
 // Obtener la ruta absoluta al archivo productos.json
 const filePath = path.join(__dirname, "./data/productos.json");
 
+/* file checker */
+const fileExists = (filePath) => {
+  try {
+    fs.accessSync(filePath);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
 const productsController = {
   getAllProducts: (req, res) => {
     const { limit } = req.query;
+    const genericThumbnail = "/img/movies/unknown.jpg";
 
     // Leer el contenido de productos.json
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error al leer productos.json:", err);
-        res.status(500).json({ error: "No hay ningun producto!" });
+        res.status(500).json({ error: "Error interno del servidor" });
         return;
       }
 
@@ -23,12 +34,24 @@ const productsController = {
         const products = JSON.parse(data);
 
         // Aplicar límite si se proporciona
-        const limitedProducts = limit
-          ? products.slice(0, Number(limit))
-          : products;
+        const limitedProducts =
+          limit && Number.isInteger(Number(limit)) && Number(limit) > 0
+            ? products.slice(0, Number(limit))
+            : products;
 
-        // Enviar los productos como respuesta
-        res.json(limitedProducts);
+        // Chequear si "thumbnails" existe en cada producto
+        const productsWithThumbnails = limitedProducts.map((product) => {
+          if (!product.thumbnails || !fileExists(product.thumbnails[0])) {
+            return {
+              ...product,
+              thumbnails: [genericThumbnail],
+            };
+          }
+          return product;
+        });
+
+        // Devolver los productos con sus thumbnails
+        res.json(productsWithThumbnails);
       } catch (err) {
         console.error("Error al analizar productos.json:", err);
         res.status(500).json({ error: "Error interno del servidor" });
@@ -54,6 +77,10 @@ const productsController = {
         const product = products.find((p) => p.id === pid);
 
         if (product) {
+          // Chequear si "thumbnails" existe en el producto
+          if (!product.thumbnails || !fileExists(product.thumbnails[0])) {
+            product.thumbnails = [genericThumbnail];
+          }
           // Enviar el producto como respuesta
           res.json(product);
         } else {

@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="grid">
+        {{#each products}}
+        <div class="item card product">
+            <img src="{{this.thumbnails}}">
+            <p class="title">{{this.title}}</p>
+            <p class="price">{{this.price}}</p>
+        </div>
+        {{/each}}
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/home.js"></script>

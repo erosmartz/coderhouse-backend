@@ -1,0 +1,150 @@
+:root {
+  --color-primary: #000000;
+  --color-secondary: #171717;
+  --color-text-primary: rgb(255, 167, 45);
+  --color-text-secondary: #eaeaea;
+  --font-family: "Courier New", Helvetica, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+html {
+  font-size: 16px;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: var(--font-family);
+  align-items: center;
+  color: var(--color-text-secondary);
+  background: linear-gradient(var(--color-secondary), var(--color-primary));
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+}
+.navbar .logo {
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.nav-items {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  list-style: none;
+}
+
+.nav-items > li > a {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 1400px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.item {
+  flex: 0 0 20%;
+}
+
+.card {
+  margin: 1rem;
+  padding: 0 0 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 3px solid var(--color-primary);
+  border-radius: 1rem;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.card img {
+  align-self: flex-start;
+  width: 100%;
+}
+
+.product {
+  background: linear-gradient(var(--color-primary), var(--color-secondary));
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+.product .title {
+  font-size: 2rem;
+  flex-wrap: wrap;
+  font-weight: 600;
+}
+
+.product .price {
+  color: var(--color-text-primary);
+  font-size: 1.6rem;
+}
+
+#addProductForm {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+#addProductForm > input {
+  font-size: 1.2rem;
+  width: 70%;
+  padding: 1rem;
+  height: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.2rem;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 0.5rem;
+  background: var(--color-secondary);
+  color: var(--color-text-secondary);
+}
+
+#addProductForm > button {
+  width: 30%;
+  padding: 1rem;
+  height: 4rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  border: 2px solid var(--color--text-primary);
+  border-radius: 1rem;
+  background: var(--color-text-primary);
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+#addProductForm > button:hover {
+  border: 3px solid var(--color--text-primary);
+  filter: brightness(1.2);
+}

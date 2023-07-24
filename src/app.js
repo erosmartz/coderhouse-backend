@@ -11,16 +11,29 @@ import viewsRouter from "./routes/views.js";
 import productsRouter from "./routes/products.js";
 import cartsRouter from "./routes/carts.js";
 
+// import handlers
+import handleWebsockets from "./handlers/websockets.js";
+
 //set globals
 const app = express();
 
 // Server HTTP
 const PORT = 8080;
 const httpServer = app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+  console.log(`Server: Escuchando en el puerto ${PORT}`);
 });
+
 //Websocket
-const socketServer = new Server(httpServer);
+const io = new Server(httpServer);
+console.log("Server: Servidor de Websocket iniciado.");
+
+//Websocket connection
+io.on("connection", (socket) => {
+  console.log("Server: Nuevo cliente conectado.");
+});
+
+//Websocket server-side Handlers
+handleWebsockets(io);
 
 //handlebars
 app.engine("handlebars", handlebars.engine());
@@ -37,11 +50,4 @@ app.use("/api/carts", cartsRouter);
 
 //default routes
 app.use("/", viewsRouter);
-
-//Websocket connection
-socketServer.on("connection", (socket) => {
-  console.log("Server says: Nuevo cliente conectado");
-  socket.on("message", (data) => {
-    console.log(data);
-  });
-});
+app.use("/realtimeproducts", viewsRouter);

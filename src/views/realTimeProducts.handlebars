@@ -1,0 +1,25 @@
+<div class="container">
+    <form id="addProductForm">
+        <input type="text" name="title" placeholder="Titulo">
+        <input type="text" name="description" placeholder="Descripcion">
+        <input type="text" name="code" placeholder="Codigo">
+        <input type="number" name="price" placeholder="Precio">
+        <input type="number" name="stock" placeholder="Stock">
+        <input type="text" name="category" placeholder="Categoria">
+        <button type="submit">Agregar</button>
+    </form>
+</div>
+
+<div class="container">
+    <div class="grid">
+        {{#each products}}
+        <div class="item card product">
+            <img src="{{this.thumbnails}}">
+            <p class="title">{{this.title}}</p>
+            <p class="price">{{this.price}}</p>
+        </div>
+        {{/each}}
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtime.js" type="module"></script>

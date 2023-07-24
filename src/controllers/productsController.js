@@ -1,98 +1,77 @@
-import fs from "fs";
+import fs from "fs/promises";
 import path from "path";
-import { __dirname } from "../utils.js";
-import { generateUniqueId } from "../utils.js";
+import { __dirname, generateUniqueId } from "../utils.js";
 
-// Obtener la ruta absoluta al archivo productos.json
 const filePath = path.join(__dirname, "./data/productos.json");
 
-/* file checker */
-const fileExists = (filePath) => {
+const fileExists = async (filePath) => {
   try {
-    fs.accessSync(filePath);
+    await fs.access(filePath);
     return true;
-  } catch (err) {
+  } catch {
     return false;
   }
 };
 
+const readProductsFile = async () => {
+  try {
+    const data = await fs.readFile(filePath, "utf8");
+    return JSON.parse(data);
+  } catch {
+    throw new Error("Error reading products file");
+  }
+};
+
 const productsController = {
-  getAllProducts: (req, res) => {
+  getAllProducts: async (req, res) => {
     const { limit } = req.query;
     const genericThumbnail = "/img/movies/unknown.jpg";
 
-    // Leer el contenido de productos.json
-    fs.readFile(filePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Error al leer productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
-      }
+    try {
+      const products = await readProductsFile();
 
-      try {
-        // Analizar los datos JSON
-        const products = JSON.parse(data);
+      const limitedProducts =
+        limit && Number.isInteger(Number(limit)) && Number(limit) > 0
+          ? products.slice(0, Number(limit))
+          : products;
 
-        // Aplicar límite si se proporciona
-        const limitedProducts =
-          limit && Number.isInteger(Number(limit)) && Number(limit) > 0
-            ? products.slice(0, Number(limit))
-            : products;
-
-        // Chequear si "thumbnails" existe en cada producto
-        const productsWithThumbnails = limitedProducts.map((product) => {
-          if (!product.thumbnails || !fileExists(product.thumbnails[0])) {
-            return {
-              ...product,
-              thumbnails: [genericThumbnail],
-            };
+      const productsWithThumbnails = await Promise.all(
+        limitedProducts.map(async (product) => {
+          const thumbnails = product.thumbnails || [];
+          if (!thumbnails.length || !(await fileExists(thumbnails[0]))) {
+            return { ...product, thumbnails: [genericThumbnail] };
           }
           return product;
-        });
+        })
+      );
 
-        // Devolver los productos con sus thumbnails
-        res.json(productsWithThumbnails);
-      } catch (err) {
-        console.error("Error al analizar productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-      }
-    });
+      res.json(productsWithThumbnails);
+    } catch {
+      res.status(500).json({ error: "Error en la funcion getAllProducts" });
+    }
   },
-  getProductById: (req, res) => {
+  getProductById: async (req, res) => {
     const { pid } = req.params;
+    const genericThumbnail = "/img/movies/unknown.jpg";
 
-    // Leer el contenido de productos.json
-    fs.readFile(filePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Error al leer productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
-      }
+    try {
+      const products = await readProductsFile();
+      const product = products.find((p) => p.id === pid);
 
-      try {
-        // Analizar los datos JSON
-        const products = JSON.parse(data);
-
-        // Encontrar el producto con el pid especificado
-        const product = products.find((p) => p.id === pid);
-
-        if (product) {
-          // Chequear si "thumbnails" existe en el producto
-          if (!product.thumbnails || !fileExists(product.thumbnails[0])) {
-            product.thumbnails = [genericThumbnail];
-          }
-          // Enviar el producto como respuesta
-          res.json(product);
-        } else {
-          res.status(404).json({ error: "Producto no encontrado" });
+      if (product) {
+        const thumbnails = product.thumbnails || [];
+        if (!thumbnails.length || !(await fileExists(thumbnails[0]))) {
+          product.thumbnails = [genericThumbnail];
         }
-      } catch (err) {
-        console.error("Error al analizar productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
+        res.json(product);
+      } else {
+        res.status(404).json({ error: "Producto no encontrado" });
       }
-    });
+    } catch {
+      res.status(500).json({ error: "Error en la funcion getProductById" });
+    }
   },
-  addProduct: (req, res) => {
+  addProduct: async (req, res) => {
     const {
       title,
       description,
@@ -101,140 +80,80 @@ const productsController = {
       status = true,
       stock,
       category,
-      thumbnails,
+      thumbnails = [],
     } = req.body;
 
-    // Leer el contenido de productos.json
-    fs.readFile(filePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Error al leer productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
-      }
+    console.log(
+      "Server(Controller): Se ha recibido el producto desde websocket. Agregando..",
+      req.body
+    );
 
-      try {
-        // Analizar los datos JSON
-        const products = JSON.parse(data);
+    try {
+      const products = await readProductsFile();
+      const id = generateUniqueId();
 
-        // Generar un ID único para el nuevo producto
-        const id = generateUniqueId();
+      const newProduct = {
+        id,
+        title,
+        description,
+        code,
+        price,
+        status,
+        stock,
+        category,
+        thumbnails,
+      };
 
-        // Crear el nuevo objeto de producto
-        const newProduct = {
-          id,
-          title,
-          description,
-          code,
-          price,
-          status,
-          stock,
-          category,
-          thumbnails: thumbnails || [],
-        };
+      products.push(newProduct);
+      await fs.writeFile(filePath, JSON.stringify(products));
 
-        // Agregar el nuevo producto al array de productos existente
-        products.push(newProduct);
+      console.log(
+        "Server(Controller): Producto agregado satisfactoriamente.",
+        newProduct
+      );
 
-        // Escribir el array de productos actualizado de nuevo en productos.json
-        fs.writeFile(filePath, JSON.stringify(products), (err) => {
-          if (err) {
-            console.error("Error al escribir productos.json:", err);
-            res.status(500).json({ error: "Error interno del servidor" });
-            return;
-          }
+      res.status(201).json(newProduct);
+    } catch (error) {
+      console.error("Server(Method): Error agregando producto.", error.message);
 
-          // Enviar el nuevo producto como respuesta
-          res.status(201).json(newProduct);
-        });
-      } catch (err) {
-        console.error("Error al analizar productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-      }
-    });
+      res.status(500).json({ error: "Error en la funcion addProduct" });
+    }
   },
-  updateProduct: (req, res) => {
+  updateProduct: async (req, res) => {
     const { pid } = req.params;
     const updatedFields = req.body;
 
-    // Leer el contenido de productos.json
-    fs.readFile(filePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Error al leer productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
+    try {
+      const products = await readProductsFile();
+      const product = products.find((p) => p.id === pid);
+
+      if (product) {
+        Object.assign(product, updatedFields);
+        await fs.writeFile(filePath, JSON.stringify(products));
+        res.json(product);
+      } else {
+        res.status(404).json({ error: "Producto no encontrado" });
       }
-
-      try {
-        // Analizar los datos JSON
-        const products = JSON.parse(data);
-
-        // Encontrar el producto con el pid especificado
-        const product = products.find((p) => p.id === pid);
-
-        if (product) {
-          // Actualizar los campos del producto con los valores enviados desde body
-          Object.assign(product, updatedFields);
-
-          // Escribir el array de productos actualizado de nuevo en productos.json
-          fs.writeFile(filePath, JSON.stringify(products), (err) => {
-            if (err) {
-              console.error("Error al escribir productos.json:", err);
-              res.status(500).json({ error: "Error interno del servidor" });
-              return;
-            }
-
-            // Enviar el producto actualizado como respuesta
-            res.json(product);
-          });
-        } else {
-          res.status(404).json({ error: "Producto no encontrado" });
-        }
-      } catch (err) {
-        console.error("Error al analizar productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-      }
-    });
+    } catch {
+      res.status(500).json({ error: "Error en la funcion updateProduct" });
+    }
   },
-  deleteProduct: (req, res) => {
+  deleteProduct: async (req, res) => {
     const { pid } = req.params;
+    try {
+      const products = await readProductsFile();
+      const productIndex = products.findIndex((p) => p.id === pid);
 
-    // Leer el contenido de productos.json
-    fs.readFile(filePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Error al leer productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
+      if (productIndex !== -1) {
+        const deletedProduct = products.splice(productIndex, 1);
+        await fs.writeFile(filePath, JSON.stringify(products));
+        res.json(deletedProduct);
+      } else {
+        res.status(404).json({ error: "Producto no encontrado" });
       }
-
-      try {
-        // Analizar los datos JSON
-        const products = JSON.parse(data);
-
-        // Encontrar el índice del producto con el pid especificado
-        const index = products.findIndex((p) => p.id === pid);
-
-        if (index !== -1) {
-          // Eliminar el producto del array de productos
-          products.splice(index, 1);
-
-          // Escribir el array de productos actualizado de nuevo en productos.json
-          fs.writeFile(filePath, JSON.stringify(products), (err) => {
-            if (err) {
-              console.error("Error al escribir productos.json:", err);
-              res.status(500).json({ error: "Error interno del servidor" });
-              return;
-            }
-
-            res.sendStatus(204);
-          });
-        } else {
-          res.status(404).json({ error: "Producto no encontrado" });
-        }
-      } catch (err) {
-        console.error("Error al analizar productos.json:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-      }
-    });
+    } catch {
+      res.status(500).json({ error: "Error en la funcion deleteProduct" });
+    }
   },
 };
 

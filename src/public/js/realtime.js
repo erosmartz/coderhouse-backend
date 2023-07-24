@@ -8,7 +8,7 @@ socket.on("connect", () => {
 
 // ================ OBJETO ======================
 
-// LOGICA PARA EL FORM
+// Convertir el formulario en objeto
 
 const form = document.getElementById("addProductForm");
 
@@ -25,7 +25,6 @@ form.addEventListener("submit", async (event) => {
   try {
     // emit el addproduct y esperar respuesta del server
     const newProduct = await addProduct(productData);
-    console.log("Client websocket: Product added");
   } catch (error) {
     console.error("Error adding product:", error);
   }
@@ -33,7 +32,7 @@ form.addEventListener("submit", async (event) => {
 
 // EMIT SOCKET CON EL OBJETO
 
-// agregar producto
+// Agregar producto
 async function addProduct(productData) {
   return new Promise((resolve, reject) => {
     socket.emit("addProduct", productData, (response) => {
@@ -48,29 +47,24 @@ async function addProduct(productData) {
 
 // =============  REFRESCAR UI ======================
 // escuchar el evento "productAdded" del servidor
-socket.on("productAdded", (data) => {
-  const newProduct = data.product;
-  displayNewProduct(newProduct);
+socket.on("productAdded", async (data) => {
+  try {
+    // Conseguir la data del nuevo objeto directamente desde el socket
+    const newProduct = data.product;
+
+    const container = document.querySelector(".grid");
+    // Crear el nuevo string
+    const productCardHTML = `
+      <div class="item card product">
+        <img src="${newProduct.thumbnails[0]}">
+        <p class="title">${newProduct.title}</p>
+        <p class="price">${newProduct.price}</p>
+      </div>
+    `;
+
+    // Insertar el nuevo producto como first-child de .grid
+    container.insertAdjacentHTML("afterbegin", productCardHTML);
+  } catch (error) {
+    console.error("Client: Error refrescando la lista de productos.", error);
+  }
 });
-
-function displayNewProduct(product) {
-  const container = document.querySelector(".grid");
-  const productCard = createProductCard(product);
-
-  container.appendChild(productCard);
-}
-
-function createProductCard(product) {
-  const cardTemplate = `
-    <div class="item card product">
-      <img src="${product.thumbnails[0]}">
-      <p class="title">${product.title}</p>
-      <p class="price">${product.price}</p>
-    </div>
-  `;
-
-  const cardElement = document.createElement("div");
-  cardElement.innerHTML = cardTemplate;
-
-  return cardElement.firstChild;
-}

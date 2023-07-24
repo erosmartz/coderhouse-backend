@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// WebSocket connection for realtime updates
+// Conexion WebSocket en realtime
 router.get("/realtimeproducts", async (req, res) => {
   try {
     const response = await axios.get("http://localhost:8080/api/products");
@@ -29,7 +29,6 @@ router.get("/realtimeproducts", async (req, res) => {
     res.render("realtimeproducts", {
       products: products,
       style: "realtimeproducts.css",
-      realtime: true, // Agregar una flag para indicar actualizaciones real-time
     });
   } catch (error) {
     console.error("Error retrieving products:", error);

@@ -104,17 +104,17 @@ const productsController = {
         thumbnails,
       };
 
-      products.push(newProduct);
+      products.unshift(newProduct);
       await fs.writeFile(filePath, JSON.stringify(products));
 
-      console.log(
-        "Server(Controller): Producto agregado satisfactoriamente.",
-        newProduct
-      );
+      console.log("Server(Controller): Producto agregado satisfactoriamente.");
 
       res.status(201).json(newProduct);
     } catch (error) {
-      console.error("Server(Method): Error agregando producto.", error.message);
+      console.error(
+        "Server(Controller): Error agregando producto.",
+        error.message
+      );
 
       res.status(500).json({ error: "Error en la funcion addProduct" });
     }

@@ -1,6 +1,15 @@
 import { generateUniqueId } from '../../../utils.js'
 import Product from '../../models/products.model.js'
 
+const fileExists = async (filePath) => {
+	try {
+		const product = await Product.findOne({ thumbnails: filePath })
+		return product !== null
+	} catch {
+		return false
+	}
+}
+
 const productsController = {
 	getAllProducts: async (req, res) => {
 		const { limit } = req.query

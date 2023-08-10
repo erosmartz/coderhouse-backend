@@ -26,7 +26,7 @@ const mongoKey = process.env.DB_KEY
 // mongoDB connection
 ;(async () => {
 	try {
-		await mongoose.connect(mongoKey)
+		await mongoose.connect(mongoKey, { dbName: 'ecommerce' })
 		console.log('Connected to the database')
 	} catch (error) {
 		console.log('Cannot connect to the database: ' + error)

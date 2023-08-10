@@ -1,19 +1,9 @@
 import { generateUniqueId } from '../../../utils.js'
 import Product from '../../models/products.model.js'
 
-const fileExists = async (filePath) => {
-	try {
-		const product = await Product.findOne({ thumbnails: filePath })
-		return product !== null
-	} catch {
-		return false
-	}
-}
-
 const productsController = {
 	getAllProducts: async (req, res) => {
 		const { limit } = req.query
-		const genericThumbnail = '/img/movies/unknown.jpg'
 
 		try {
 			const products = await Product.find()
@@ -23,33 +13,18 @@ const productsController = {
 					? products.slice(0, Number(limit))
 					: products
 
-			const productsWithThumbnails = await Promise.all(
-				limitedProducts.map(async (product) => {
-					const thumbnails = product.thumbnails || []
-					if (!thumbnails.length || !(await fileExists(thumbnails[0]))) {
-						return { ...product.toObject(), thumbnails: [genericThumbnail] }
-					}
-					return product.toObject()
-				})
-			)
-
-			res.json(productsWithThumbnails)
+			res.json(limitedProducts)
 		} catch {
 			res.status(500).json({ error: 'Error en la funcion getAllProducts' })
 		}
 	},
 	getProductById: async (req, res) => {
 		const { pid } = req.params
-		const genericThumbnail = '/img/movies/unknown.jpg'
 
 		try {
 			const product = await Product.findById(pid)
 
 			if (product) {
-				const thumbnails = product.thumbnails || []
-				if (!thumbnails.length || !(await fileExists(thumbnails[0]))) {
-					product.thumbnails = [genericThumbnail]
-				}
 				res.json(product.toObject())
 			} else {
 				res.status(404).json({ error: 'Producto no encontrado' })

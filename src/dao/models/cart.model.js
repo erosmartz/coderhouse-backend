@@ -6,6 +6,6 @@ const cartSchema = new mongoose.Schema({
 	items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'products' }],
 })
 
-const Cart = mongoose.model('cart', cartSchema)
+const Cart = mongoose.model('carts', cartSchema)
 
 export default Cart

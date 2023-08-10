@@ -1,9 +1,9 @@
-import userModel from '../../models/user.js'
+import User from '../../models/users.model.js'
 
 export const createUser = async (req, res) => {
 	try {
 		// Nuevo user
-		const newUser = await userModel.create(req.body)
+		const newUser = await User.create(req.body)
 		res.status(201).json(newUser)
 	} catch (error) {
 		res.status(500).json({ error: 'Failed to create a new user' })
@@ -13,7 +13,7 @@ export const createUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
 	try {
 		// GET todos los usuarios
-		const users = await userModel.find()
+		const users = await User.find()
 		res.json(users)
 	} catch (error) {
 		res.status(500).json({ error: 'Failed to get all users' })
@@ -23,7 +23,7 @@ export const getAllUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
 	try {
 		// GET user por ID
-		const user = await userModel.findById(req.params.id)
+		const user = await User.findById(req.params.id)
 		if (!user) {
 			return res.status(404).json({ error: 'User not found' })
 		}
@@ -36,13 +36,9 @@ export const getUserById = async (req, res) => {
 export const updateUserById = async (req, res) => {
 	try {
 		// Update user por ID
-		const updatedUser = await userModel.findByIdAndUpdate(
-			req.params.id,
-			req.body,
-			{
-				new: true,
-			}
-		)
+		const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+			new: true,
+		})
 		if (!updatedUser) {
 			return res.status(404).json({ error: 'User not found' })
 		}
@@ -55,7 +51,7 @@ export const updateUserById = async (req, res) => {
 export const deleteUserById = async (req, res) => {
 	try {
 		//Delete user por ID
-		const deletedUser = await userModel.findByIdAndDelete(req.params.id)
+		const deletedUser = await User.findByIdAndDelete(req.params.id)
 		if (!deletedUser) {
 			return res.status(404).json({ error: 'User not found' })
 		}

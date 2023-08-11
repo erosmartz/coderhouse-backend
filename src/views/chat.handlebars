@@ -1,0 +1,33 @@
+<div class="container">
+
+    <!-- Chatbox container -->
+    <div class="chatbox border">
+        <h1>Bienvenidos a nuestro chat!</h1>
+
+        <!-- Chat messages will be displayed here -->
+
+        <!-- User info form -->
+        <form class='container {{#if userSubmitted}}inactive{{/if}}' id="userInfoForm">
+            <label for="firstNameInput">Nombre:</label>
+            <input type="text" id="firstNameInput" placeholder="John" required>
+            <label for="lastNameInput">Apellido:</label>
+            <input type="text" id="lastNameInput" placeholder="Wick" required>
+            <label for="emailInput">Email:</label>
+            <input type="email" id="emailInput" placeholder="ejemplo@hotmail.com" required>
+            <button type="submit">Ingresar</button>
+        </form>
+
+        <!-- Chat form -->
+        <form id="chatForm">
+            <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
+            <button type="submit">></button>
+        </form>
+    </div>
+
+
+
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chatbox.js"></script>

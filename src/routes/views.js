@@ -36,4 +36,9 @@ router.get('/realtimeproducts', async (req, res) => {
 	}
 })
 
+// Conexion chat WebSocket
+router.get('/chat', (req, res) => {
+	res.render('chat', { style: 'chat.css' })
+})
+
 export default router

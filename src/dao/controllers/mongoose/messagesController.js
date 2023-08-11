@@ -1,4 +1,4 @@
-import Message from '../models/message'
+import Message from '../../models/messages.model.js'
 
 export const messagesController = {
 	getAllMessages: async (req, res) => {

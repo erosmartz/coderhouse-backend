@@ -11,6 +11,7 @@ import viewsRouter from './routes/views.js'
 import productsRouter from './routes/products.js'
 import cartsRouter from './routes/carts.js'
 import usersRouter from './routes/users.js'
+import messagesRouter from './routes/messages.js'
 
 // import handlers
 import handleWebsockets from './handlers/websockets.js'
@@ -70,6 +71,9 @@ app.use('/api/carts', cartsRouter)
 
 //users routes
 app.use('/api/users', usersRouter)
+
+//messages routes
+app.use('/api/messages', messagesRouter)
 
 //default routes
 app.use('/', viewsRouter)

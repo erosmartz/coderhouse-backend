@@ -3,19 +3,40 @@ import Product from '../../models/products.model.js'
 
 const productsController = {
 	getAllProducts: async (req, res) => {
-		const { limit } = req.query
+		const { limit = 10, page = 1, sort, genre } = req.query
+		const query = {}
+
+		// Apply filters based on query parameters
+		if (genre) {
+			query.category = genre
+		}
 
 		try {
-			const products = await Product.find()
+			const queryBuilder = Product.find(query)
 
-			const limitedProducts =
-				limit && Number.isInteger(Number(limit)) && Number(limit) > 0
-					? products.slice(0, Number(limit))
-					: products
+			// Apply pagination
+			const parsedLimit = Number(limit)
+			if (!isNaN(parsedLimit)) {
+				queryBuilder.limit(parsedLimit)
+			}
 
-			res.json(limitedProducts)
-		} catch {
-			res.status(500).json({ error: 'Error en la funcion getAllProducts' })
+			const parsedPage = Number(page)
+			if (!isNaN(parsedPage)) {
+				const skip = (parsedPage - 1) * parsedLimit
+				queryBuilder.skip(skip)
+			}
+
+			// Apply sorting
+			if (sort) {
+				queryBuilder.sort(sort)
+			}
+
+			const products = await queryBuilder.exec()
+
+			res.json(products)
+		} catch (error) {
+			console.error('Error retrieving products:', error)
+			res.status(500).json({ error: 'Error retrieving products' })
 		}
 	},
 	getProductById: async (req, res) => {

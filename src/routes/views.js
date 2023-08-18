@@ -5,12 +5,38 @@ const router = express.Router()
 
 router.get('/', async (req, res) => {
 	try {
-		const response = await axios.get('http://localhost:8080/api/products')
-		const products = response.data
+		const { page, sort, genre, limit } = req.query
+
+		const response = await axios.get('http://localhost:8080/api/products', {
+			params: {
+				page: page || 1,
+				sort,
+				genre,
+				limit,
+			},
+		})
+
+		const products = response.data.docs
+
+		const paginationInfo = {
+			totalDocs: response.data.totalDocs,
+			limit: response.data.limit,
+			totalPages: response.data.totalPages,
+			page: response.data.page,
+			pagingCounter: response.data.pagingCounter,
+			hasPrevPage: response.data.hasPrevPage,
+			hasNextPage: response.data.hasNextPage,
+			prevPage: response.data.prevPage,
+			nextPage: response.data.nextPage,
+		}
+
+		const params = { page, sort, genre, limit }
 
 		// Renderizar home.handlebars
 		res.render('home', {
 			products: products,
+			paginationInfo: paginationInfo,
+			params: params,
 			style: 'home.css',
 		})
 	} catch (err) {

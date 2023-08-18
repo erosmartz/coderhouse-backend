@@ -1,4 +1,16 @@
 <div class="container">
+    <div class="filters">
+        {{#if params.sort}}
+        <div>
+            <p>Ordenado: {{params.sort}}</p>
+        </div>
+        {{/if}}
+        {{#if params.genre}}
+        <div>
+            <p>Genero: {{params.genre}}</p>
+        </div>
+        {{/if}}
+    </div>
     <div class="grid">
         {{#each products}}
         <div class="item card product">
@@ -7,5 +19,22 @@
             <p class="price">{{this.price}}</p>
         </div>
         {{/each}}
+    </div>
+    <div class="pagination">
+        {{#if paginationInfo.hasPrevPage}}
+        <a href="?page={{paginationInfo.prevPage}}">Anterior</a>
+        {{/if}}
+
+        {{#each paginationInfo.totalPages}}
+        {{#if (eq this paginationInfo.page)}}
+        <span class="current-page">{{this}}</span>
+        {{else}}
+        <a href="?page={{this}}">{{this}}</a>
+        {{/if}}
+        {{/each}}
+
+        {{#if paginationInfo.hasNextPage}}
+        <a href="?page={{paginationInfo.nextPage}}">Next</a>
+        {{/if}}
     </div>
 </div>

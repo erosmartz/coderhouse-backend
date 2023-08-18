@@ -12,26 +12,13 @@ const productsController = {
 		}
 
 		try {
-			const queryBuilder = Product.find(query)
-
-			// Apply pagination
-			const parsedLimit = Number(limit)
-			if (!isNaN(parsedLimit)) {
-				queryBuilder.limit(parsedLimit)
+			const options = {
+				page: Number(page),
+				limit: Number(limit),
+				sort: sort,
 			}
 
-			const parsedPage = Number(page)
-			if (!isNaN(parsedPage)) {
-				const skip = (parsedPage - 1) * parsedLimit
-				queryBuilder.skip(skip)
-			}
-
-			// Apply sorting
-			if (sort) {
-				queryBuilder.sort(sort)
-			}
-
-			const products = await queryBuilder.exec()
+			const products = await Product.paginate(query, options)
 
 			res.json(products)
 		} catch (error) {

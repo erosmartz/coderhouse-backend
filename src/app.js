@@ -7,11 +7,11 @@ import { Server } from 'socket.io'
 import { __dirname } from './utils.js'
 
 // import routers
-import viewsRouter from './routes/views.js'
-import productsRouter from './routes/products.js'
-import cartsRouter from './routes/carts.js'
-import usersRouter from './routes/users.js'
-import messagesRouter from './routes/messages.js'
+import viewsRouter from './routes/views.router.js'
+import productsRouter from './routes/products.router.js'
+import cartsRouter from './routes/carts.router.js'
+import usersRouter from './routes/users.router.js'
+import messagesRouter from './routes/messages.router.js'
 
 // import handlers
 import handleWebsockets from './handlers/websockets.js'
@@ -68,7 +68,7 @@ app.use(express.json())
 
 //api routes
 app.use('/api/products', productsRouter)
-app.use('/api/carts', cartsRouter)
+app.use('/api/cart', cartsRouter)
 
 //users routes
 app.use('/api/users', usersRouter)

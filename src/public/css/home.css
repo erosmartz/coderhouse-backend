@@ -87,12 +87,20 @@ body {
 	overflow: hidden;
 }
 
+.card:hover {
+	filter: brightness(1.04) contrast(0.97);
+	transition: filter 0.2s ease-out;
+}
+
 .card img {
 	align-self: flex-start;
 	width: 100%;
+	height: 400px;
+	object-fit: cover;
 }
 
 .product {
+	position: relative;
 	background: linear-gradient(var(--color-primary), var(--color-secondary));
 	color: var(--color-text-secondary);
 	text-decoration: none;
@@ -108,6 +116,24 @@ body {
 	font-size: 1.6rem;
 }
 
+.product > button {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+	padding: 5px 10px;
+	background-color: var(--color-text-primary);
+	/* remove button tag styles */
+	border: none;
+	cursor: pointer;
+	border-radius: 1rem;
+	font-weight: 600;
+	font-size: 1.5em;
+}
+.product > button:hover {
+	background-color: rgb(6, 222, 161);
+	transition: background-color 0.2s ease-out;
+}
+
 .pagination {
 	display: flex;
 	justify-content: center;
@@ -117,4 +143,85 @@ body {
 
 .current-page {
 	color: var(--color-text-primary);
+}
+
+#usernameModal {
+	display: none;
+	position: fixed;
+	z-index: 9999;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+	background-color: var(--color-secondary);
+	margin: 10% auto;
+	padding: 20px;
+	border: 1px solid var(--color-text-primary);
+	width: 300px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	border-radius: 10px;
+}
+
+.modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.modal-title {
+	margin: 0;
+	font-size: 1.5em;
+	color: var(--color-text-primary);
+}
+
+.close {
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	font-size: 20px;
+}
+#closeModalBtn {
+	padding: 8px 12px;
+	background-color: var(--color-text-primary);
+	color: var(--color-text-secondary);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.modal-body {
+	margin-bottom: 10px;
+}
+
+#usernameInput {
+	width: 90%;
+	padding: 10px;
+	background-color: #000000;
+	border: 1px solid var(--color-text-primary);
+	border-radius: 4px;
+	color: var(--color-text-secondary);
+}
+
+.modal-footer {
+	display: flex;
+	justify-content: flex-end;
+}
+
+#saveUsernameBtn {
+	padding: 8px 12px;
+	background-color: var(--color-text-primary);
+	color: var(--color-text-secondary);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+#saveUsernameBtn:hover {
+	background-color: rgba(var(--color-text-primary), 0.8);
 }

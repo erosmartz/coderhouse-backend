@@ -1,4 +1,18 @@
 <div class="container">
+    <div id="usernameModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ingresa tu nombre de usuario:</h5>
+                <button id="closeModalBtn" class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="usernameInput" placeholder="FanDePelis123">
+            </div>
+            <div class="modal-footer">
+                <button id="saveUsernameBtn" class="btn">Guardar</button>
+            </div>
+        </div>
+    </div>
     <div class="filters">
         {{#if params.sort}}
         <div>
@@ -17,6 +31,7 @@
             <img src="{{this.thumbnails}}" onerror="this.src='/img/movies/unknown.jpg'">
             <p class="title">{{this.title}}</p>
             <p class="price">{{this.price}}</p>
+            <button onclick="addToCart('{{this._id}}')">+</button>
         </div>
         {{/each}}
     </div>
@@ -34,7 +49,8 @@
         {{/each}}
 
         {{#if paginationInfo.hasNextPage}}
-        <a href="?page={{paginationInfo.nextPage}}">Next</a>
+        <a href="?page={{paginationInfo.nextPage}}">Siguiente</a>
         {{/if}}
     </div>
 </div>
+<script src="/js/home.js" type="module"></script>

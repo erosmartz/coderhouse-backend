@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-import axios from 'axios'
-
 const chatForm = document.getElementById('chatForm')
 const userInfoForm = document.getElementById('userInfoForm')
 

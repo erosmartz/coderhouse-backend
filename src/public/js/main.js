@@ -14,3 +14,15 @@ if (username) {
 } else {
 	usernameElement.textContent = 'Visitante'
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+	const cartLink = document.getElementById('cart-link')
+
+	cartLink.addEventListener('click', (event) => {
+		event.preventDefault()
+
+		const url = `/cart?username=${username}`
+
+		window.location.href = url
+	})
+})

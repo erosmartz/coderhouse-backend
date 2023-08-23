@@ -33,15 +33,27 @@ document.addEventListener('DOMContentLoaded', () => {
 							// Handle the data returned by the server
 							console.log(data.message)
 							updateModal(
-								`Usuario creado correctamente. <br> Bienvenid@ ${username}.`
+								`Usuario ${username} creado correctamente. <br> Iniciando sesion...`
 							)
+
+							// Close the modal after a timeout of 1 second
+							setTimeout(() => {
+								modal.style.display = 'none'
+								location.reload()
+							}, 1000)
 						})
 					} else {
 						// The username already exists (status code 409)
 						return response.json().then((data) => {
 							// Handle the error response
 							console.log(data.error)
-							updateModal(`El usuario ${username} ya existe.`)
+							updateModal(`Iniciando sesion con el usuario ${username}...`)
+
+							// Close the modal after a timeout of 1 second
+							setTimeout(() => {
+								modal.style.display = 'none'
+								location.reload()
+							}, 1000)
 						})
 					}
 				})
@@ -53,11 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			// Store the username in localStorage
 			localStorage.setItem('username', username)
-
-			// Close the modal after a timeout of 1/2 second
-			setTimeout(() => {
-				modal.style.display = 'none'
-			}, 500)
 		})
 	}
 
@@ -95,24 +102,54 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 function updateModal(message) {
-	const modalTitle = document.getElementsByClassName('.modal-title')
+	const modalTitle = document.querySelector('.modal-title')
 	modalTitle.textContent = message
 }
 
-function addToCart(productId) {
-	console.log('hello')
-	console.log(productId)
-	/* 	fetch(`/api/cart/?productId=${productId}`, {
-		method: 'POST',
-	})
-		.then((response) => {
-			// Handle the response
-		})
-		.catch((error) => {
-			// Handle the error
-		}) */
-}
+document.addEventListener('DOMContentLoaded', () => {
+	const addToCartButtons = document.querySelectorAll('.addToCartBtn')
 
-function test() {
-	console.log('test')
-}
+	addToCartButtons.forEach((button) => {
+		button.addEventListener('click', (event) => {
+			const productId = event.target.id
+			const username = localStorage.getItem('username')
+
+			// Send the productId and username to the server for adding to the cart
+			fetch(`/api/cart/products/add/${productId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ username }),
+			})
+				.then((response) => {
+					// Handle the response
+					if (response.ok) {
+						const notification = document.createElement('div')
+						notification.textContent = 'Peli agregada al carrito!'
+						notification.classList.add('notification')
+
+						document.body.appendChild(notification)
+
+						setTimeout(() => {
+							notification.remove()
+						}, 3000)
+					} else {
+						// Handle the error response
+						const notification = document.createElement('div')
+						notification.textContent = 'Whooops! Hubo un error.'
+						notification.classList.add('notification')
+
+						document.body.appendChild(notification)
+
+						setTimeout(() => {
+							notification.remove()
+						}, 3000)
+					}
+				})
+				.catch((error) => {
+					// Handle the error
+				})
+		})
+	})
+})

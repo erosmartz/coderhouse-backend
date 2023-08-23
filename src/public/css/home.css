@@ -225,3 +225,25 @@ body {
 #saveUsernameBtn:hover {
 	background-color: rgba(var(--color-text-primary), 0.8);
 }
+
+.notification {
+	position: fixed;
+	top: 60px;
+	right: 30px;
+	background-color: var(--color-text-primary);
+	padding: 10px;
+	color: var(--color-primary);
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	border-radius: 10px;
+	animation: fadeOut 3s forwards;
+}
+
+@keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}

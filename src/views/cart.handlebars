@@ -1,36 +1,17 @@
 <div class="container">
-    <h1>Cart</h1>
-    {{#if cartItems}}
-    <ul>
-        {{#each cartItems}}
-        <li>{{this.title}} - ${{this.price}} <button class="remove-btn" data-id="{{this.id}}">Remove</button></li>
+    <h2>Tu carrito de compras</h2>
+    <div class="cart">
+        {{#each cart}}
+        <div class="product">
+            <h3>{{this.title}}</h3>
+            <p>Price: {{this.price}}</p>
+            <img src="{{this.thumbnails.[0]}}" alt="Pelicula" onerror="this.src='/img/movies/unknown.jpg'">
+            <div class="quantity">
+                <button class="decrement">-</button>
+                <span>{{this.quantity}}</span>
+                <button class="increment">+</button>
+            </div>
+        </div>
         {{/each}}
-    </ul>
-    <form id="username-form">
-        <label for="username">Enter Username:</label>
-        <input type="text" id="username" name="username" required>
-        <button type="submit">Submit</button>
-    </form>
-    {{else}}
-    <p>No items in the cart.</p>
-    {{/if}}
+    </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const removeButtons = document.querySelectorAll('.remove-btn');
-        removeButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                const productId = this.getAttribute('data-id');
-                // axios remove the item from the cart
-            });
-        });
-
-        const form = document.getElementById('username-form');
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            // function to submit the form using Axios
-        });
-    });
-</script>

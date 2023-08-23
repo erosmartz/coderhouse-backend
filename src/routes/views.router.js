@@ -3,6 +3,25 @@ import axios from 'axios'
 
 const router = express.Router()
 
+router.get('/cart', async (req, res) => {
+	try {
+		const username = req.query.username // Retrieve the username from the query parameters
+		const response = await axios.get('http://localhost:8080/api/cart', {
+			params: { username }, // Pass the username as a query parameter
+		})
+
+		const cart = response.data
+
+		res.render('cart', {
+			cart: cart,
+			style: 'cart.css',
+		})
+	} catch (error) {
+		console.error('Error retrieving cart:', error)
+		res.status(500).json({ error: 'Error retrieving cart' })
+	}
+})
+
 router.get('/', async (req, res) => {
 	try {
 		const { page, sort, genre, limit } = req.query

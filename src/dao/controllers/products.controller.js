@@ -1,4 +1,3 @@
-import { generateUniqueId } from '../../utils.js'
 import Product from '../models/products.model.js'
 
 const productsController = {

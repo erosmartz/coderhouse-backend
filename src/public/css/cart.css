@@ -70,7 +70,7 @@ h2 {
 	margin-bottom: 20px;
 }
 
-.cart {
+.cart-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	grid-gap: 20px;
@@ -111,4 +111,43 @@ h2 {
 
 .quantity span {
 	margin: 0 10px;
+}
+
+/* Styles for the cart list table */
+.cart-list {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+.cart-list thead {
+	background-color: var(--color-primary);
+	color: var(--color-text-primary);
+}
+
+.cart-list thead th {
+	padding: 10px;
+}
+
+.cart-list tbody {
+	background-color: var(--color-secondary);
+	color: var(--color-text-secondary);
+}
+
+.cart-list tbody tr:nth-child(even) {
+	background-color: var(--color-primary);
+}
+
+.cart-list tbody td {
+	padding: 10px;
+}
+
+/* Additional styles for the table headers */
+.cart-list thead th {
+	text-align: left;
+}
+
+/* Additional styles for the table body */
+.cart-list tbody td {
+	text-align: left;
 }

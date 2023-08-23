@@ -1,10 +1,34 @@
 <div class="container">
     <h2>Tu carrito de compras</h2>
-    <div class="cart">
+    <div class="display-mode">
+        <button class="cards"><img src="/img/detail.png" alt="Detalles"></button>
+        <button class="list"><img src="/img/list.png" alt="Lista"> </button>
+    </div>
+    {{#if list}}
+    <table class="cart-list">
+        <thead>
+            <tr>
+                <th>Articulo</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each this}}
+            <tr>
+                <td>{{this.title}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.quantity}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+    <div class="cart-grid">
         {{#each cart}}
         <div class="product">
             <h3>{{this.title}}</h3>
-            <p>Price: {{this.price}}</p>
+            <p>Precio: {{this.price}}</p>
             <img src="{{this.thumbnails.[0]}}" alt="Pelicula" onerror="this.src='/img/movies/unknown.jpg'">
             <div class="quantity">
                 <button class="decrement">-</button>
@@ -14,4 +38,7 @@
         </div>
         {{/each}}
     </div>
+    {{/if}}
+
 </div>
+<script src="js/cart.js" type="module"></script>

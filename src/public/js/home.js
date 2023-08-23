@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	addToCartButtons.forEach((button) => {
 		button.addEventListener('click', (event) => {
-			const productId = event.target.id
+			const productId = button.id
 			const username = localStorage.getItem('username')
 
 			// Send the productId and username to the server for adding to the cart

@@ -1,21 +1,24 @@
 <div class="container">
     <h2>Tu carrito de compras</h2>
     <div class="display-mode">
-        <button class="cards"><img src="/img/detail.png" alt="Detalles"></button>
-        <button class="list"><img src="/img/list.png" alt="Lista"> </button>
+        <h3>Mostrar como:</h3>
+        <button class="cards" title="Detalles"><img src="/img/detail.png" alt="Detalles"></button>
+        <button class="list" title="Lista"><img src="/img/list.png" alt="Lista"> </button>
     </div>
     {{#if list}}
     <table class="cart-list">
         <thead>
             <tr>
+                <th></th>
                 <th>Articulo</th>
                 <th>Precio</th>
                 <th>Cantidad</th>
             </tr>
         </thead>
         <tbody>
-            {{#each this}}
+            {{#each cart}}
             <tr>
+                <td><img src="{{this.thumbnails.[0]}}" onerror="this.src='/img/movies/unknown.jpg'"></td>
                 <td>{{this.title}}</td>
                 <td>{{this.price}}</td>
                 <td>{{this.quantity}}</td>

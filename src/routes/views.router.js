@@ -12,11 +12,8 @@ router.get('/cart', async (req, res) => {
 
 		const cart = response.data
 
-		// Check if the 'list' parameter is null or undefined and set it to false if needed
-		const list =
-			req.query.list === null || req.query.list === undefined
-				? false
-				: req.query.list
+		// Retrieve the 'list' query parameter and set it to false if undefined or null
+		const list = req.query.list === 'true'
 
 		res.render('cart', {
 			cart: cart,

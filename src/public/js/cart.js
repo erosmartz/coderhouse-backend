@@ -59,22 +59,15 @@ async function updateQuantity(productid, action) {
 	}
 }
 
-// Select elements with class "priceValue" and "quantityValue"
-const priceElements = document.querySelectorAll('.priceValue')
+// Select elements with class "quantityValue"
 const quantityElements = document.querySelectorAll('.quantityValue')
 
-// Calculate total price and total quantity
-let totalPrice = 0
+// Calculate total quantity
 let totalQuantity = 0
-
-priceElements.forEach((element) => {
-	totalPrice += parseFloat(element.innerText)
-})
 
 quantityElements.forEach((element) => {
 	totalQuantity += parseInt(element.innerText)
 })
 
-// Update the DOM with the total values
-document.getElementById('totalPrice').innerText = totalPrice.toFixed(2)
+// Update the DOM with the total value
 document.getElementById('totalQuantity').innerText = totalQuantity

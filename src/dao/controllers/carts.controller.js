@@ -17,6 +17,16 @@ const cartsController = {
 				return res.status(404).json({ error: 'Carrito no encontrado.' })
 			}
 
+			// Calculate the total price
+			let totalPrice = 0
+			cart.cartItems.forEach((item) => {
+				totalPrice += item.productid.price * item.quantity
+			})
+
+			// Update the total price in the cart
+			cart.total = totalPrice
+			await cart.save()
+
 			// Extract product information from populated cartItems
 			const userCart = cart.cartItems.map((item) => {
 				const { quantity } = item
@@ -31,7 +41,13 @@ const cartsController = {
 				}
 			})
 
-			res.json(userCart)
+			// Include the total value in the userCart response
+			const response = {
+				userCart,
+				total: cart.total,
+			}
+
+			res.json(response)
 		} catch (error) {
 			console.error(error)
 			res.status(500).json({ error: 'Internal server error' })

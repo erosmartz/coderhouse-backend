@@ -13,6 +13,7 @@ const cartSchema = new mongoose.Schema(
 				quantity: { type: Number, required: true },
 			},
 		],
+		total: { type: Number, required: true },
 	},
 	{ timestamps: true }
 )

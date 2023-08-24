@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            {{#each cart}}
+            {{#each cart.userCart}}
             <tr>
                 <td><img src="{{this.thumbnails.[0]}}" onerror="this.src='/img/movies/unknown.jpg'"></td>
                 <td>{{this.title}}</td>
@@ -33,14 +33,14 @@
             <tr>
                 <td></td>
                 <td>Total:</td>
-                <td id="totalPrice"></td>
+                <td>{{cart.total}}</td>
                 <td id="totalQuantity"></td>
             </tr>
         </tbody>
     </table>
     {{else}}
     <div class="cart-grid">
-        {{#each cart}}
+        {{#each cart.userCart}}
         <div class="product">
             <h3>{{this.title}}</h3>
             <p class="priceValue"> {{this.price}}</p>
@@ -56,7 +56,7 @@
     <div class="total">
         <div>
             <p>Precio total:</p>
-            <p id="totalPrice"></p>
+            <p>{{cart.total}}</p>
         </div>
         <div>
             <p>Cantidad total:</p>

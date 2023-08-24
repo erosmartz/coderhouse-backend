@@ -19,8 +19,8 @@ const cartsController = {
 
 			// Extract product information from populated cartItems
 			const userCart = cart.cartItems.map((item) => {
-				const { _id, title, price, thumbnails, quantity } = item.productid
-
+				const { quantity } = item
+				const { _id, title, price, thumbnails } = item.productid
 				const firstThumbnail = thumbnails?.[0]
 				return {
 					productid: _id,
@@ -33,7 +33,8 @@ const cartsController = {
 
 			res.json(userCart)
 		} catch (error) {
-			console.log(error)
+			console.error(error)
+			res.status(500).json({ error: 'Internal server error' })
 		}
 	},
 

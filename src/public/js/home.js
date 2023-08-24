@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
 						// The request was successful (status code 2xx)
 						return response.json().then((data) => {
 							// Handle the data returned by the server
-							console.log(data.message)
 							updateModal(
 								`Usuario ${username} creado correctamente. <br> Iniciando sesion...`
 							)
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
 						// The username already exists (status code 409)
 						return response.json().then((data) => {
 							// Handle the error response
-							console.log(data.error)
 							updateModal(`Iniciando sesion con el usuario ${username}...`)
 
 							// Close the modal after a timeout of 1 second
@@ -90,9 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			})
 			.then((data) => {
 				// Handle the data returned by the server
-				console.log(
-					`Carrito del usuario ${hasUsername}: ${JSON.stringify(data, null, 2)}`
-				)
 			})
 			.catch((error) => {
 				// Handle any network or other fetch-related errors

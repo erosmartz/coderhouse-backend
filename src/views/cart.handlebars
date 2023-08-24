@@ -20,10 +20,22 @@
             <tr>
                 <td><img src="{{this.thumbnails.[0]}}" onerror="this.src='/img/movies/unknown.jpg'"></td>
                 <td>{{this.title}}</td>
-                <td>{{this.price}}</td>
-                <td>{{this.quantity}}</td>
+                <td class="priceValue">{{this.price}}</td>
+                <td>
+                    <div class="quantity" id="{{this.productid}}">
+                        <button class="decrement">-</button>
+                        <span class="quantityValue">{{this.quantity}}</span>
+                        <button class="increment">+</button>
+                    </div>
+                </td>
             </tr>
             {{/each}}
+            <tr>
+                <td></td>
+                <td>Total:</td>
+                <td id="totalPrice"></td>
+                <td id="totalQuantity"></td>
+            </tr>
         </tbody>
     </table>
     {{else}}
@@ -31,17 +43,26 @@
         {{#each cart}}
         <div class="product">
             <h3>{{this.title}}</h3>
-            <p>Precio: {{this.price}}</p>
+            <p class="priceValue"> {{this.price}}</p>
             <img src="{{this.thumbnails.[0]}}" alt="Pelicula" onerror="this.src='/img/movies/unknown.jpg'">
-            <div class="quantity">
+            <div class="quantity" id="{{this.productid}}">
                 <button class="decrement">-</button>
-                <span>{{this.quantity}}</span>
+                <span class="quantityValue">{{this.quantity}}</span>
                 <button class="increment">+</button>
             </div>
         </div>
         {{/each}}
     </div>
-    {{/if}}
+    <div class="total">
+        <div>
+            <p>Precio total:</p>
+            <p id="totalPrice"></p>
+        </div>
+        <div>
+            <p>Cantidad total:</p>
+            <p id="totalQuantity"></p>
+        </div>
+        {{/if}}
 
-</div>
-<script src="js/cart.js" type="module"></script>
+    </div>
+    <script src="js/cart.js" type="module"></script>

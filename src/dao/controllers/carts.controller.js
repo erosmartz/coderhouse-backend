@@ -98,6 +98,45 @@ const cartsController = {
 			res.status(500).json({ error: 'Error adding product to cart' })
 		}
 	},
+
+	updateProductFromCart: async (req, res) => {
+		try {
+			const { username, productid, update } = req.query
+
+			// Find the cart document
+			const cart = await Cart.findOne({ username: username })
+
+			// Find the index of the product in the cartItems array
+			const productIndex = cart.cartItems.findIndex(
+				(item) => item.productid.toString() === productid
+			)
+
+			if (productIndex !== -1) {
+				if (update === 'increment') {
+					// Increment the quantity by 1
+					cart.cartItems[productIndex].quantity += 1
+				} else if (update === 'decrement') {
+					// Decrement the quantity by 1
+					cart.cartItems[productIndex].quantity -= 1
+
+					if (cart.cartItems[productIndex].quantity === 0) {
+						// Remove the product from the cart if the quantity becomes 0
+						cart.cartItems.splice(productIndex, 1)
+					}
+				}
+
+				// Save the updated cart document
+				await cart.save()
+
+				res.status(200).json(cart)
+			} else {
+				res.status(404).json({ error: 'Product not found in cart' })
+			}
+		} catch (error) {
+			console.error('Error updating product from cart:', error)
+			res.status(500).json({ error: 'Error updating product from cart' })
+		}
+	},
 }
 
 export default cartsController

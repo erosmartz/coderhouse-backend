@@ -28,7 +28,7 @@ const mongoKey = process.env.DB_KEY
 ;(async () => {
 	try {
 		await mongoose.connect(mongoKey, { dbName: 'ecommerce' })
-		console.log('Connected to the database')
+		console.log('Server: mongoDB Atlas - connected.')
 	} catch (error) {
 		console.log('Cannot connect to the database: ' + error)
 		process.exit(1)

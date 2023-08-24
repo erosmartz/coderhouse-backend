@@ -139,6 +139,8 @@ body {
 	justify-content: center;
 	flex-direction: row;
 	gap: 1rem;
+	padding: 2rem;
+	font-size: 30px;
 }
 
 .current-page {

@@ -17,12 +17,8 @@ const cartsController = {
 				return res.status(404).json({ error: 'Carrito no encontrado.' })
 			}
 
-			console.log('cart:', cart)
-			console.log('cartItems:', cart.cartItems)
 			// Extract product information from populated cartItems
 			const userCart = cart.cartItems.map((item) => {
-				console.log('item:', item) // Add this console log
-
 				const { _id, title, price, thumbnails, quantity } = item.productid
 
 				const firstThumbnail = thumbnails?.[0]
@@ -34,8 +30,6 @@ const cartsController = {
 					quantity,
 				}
 			})
-
-			console.log('userCart:', userCart) // Add this console log
 
 			res.json(userCart)
 		} catch (error) {
@@ -53,10 +47,6 @@ const cartsController = {
 
 			if (cart) {
 				// A cart already exists for the user, return the cart data
-				console.log(
-					`Carrito existente para usuario ${username}, retornando datos del carrito...`
-				)
-				console.log(`Datos del carrito: ${JSON.stringify(cart, null, 2)}`)
 				return res.status(200).json(cart)
 			} else {
 				// Create a new cart
@@ -65,7 +55,6 @@ const cartsController = {
 
 				// Return the newly created cart
 				res.status(201).json(cart)
-				console.log('Nuevo carrito vacio creado para el usuario' + username)
 			}
 		} catch (error) {
 			// Handle any errors
@@ -85,12 +74,14 @@ const cartsController = {
 			// Find the cart document
 			const cart = await Cart.findOne({ username: username })
 
-			// Check if the cart already has an item with the specified productId
-			const existingItem = cart.cartItems.find((item) => item.productid === pid)
+			// Find the index of the existing item in the cartItems array
+			const existingItemIndex = cart.cartItems.findIndex(
+				(item) => item.productid.toString() === pid
+			)
 
-			if (existingItem) {
+			if (existingItemIndex !== -1) {
 				// If an item with the productId already exists, increment the quantity by 1
-				existingItem.quantity += 1
+				cart.cartItems[existingItemIndex].quantity += 1
 			} else {
 				// If an item with the productId does not exist, create a new item with quantity 1
 				cart.cartItems.push({ productid: pid, quantity: 1 })
@@ -102,9 +93,8 @@ const cartsController = {
 			// Return the updated cart
 			res.status(200).json(cart)
 		} catch (error) {
-			// Handle any errors
-			console.error(error)
-			res.status(500).json({ error: 'Internal server error' })
+			console.error('Error adding product to cart:', error)
+			res.status(500).json({ error: 'Error adding product to cart' })
 		}
 	},
 }
